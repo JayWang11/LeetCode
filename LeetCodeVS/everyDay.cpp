@@ -641,6 +641,8 @@ int Solution_everyDay::t1335_minDifficulty(vector<int>& jobDifficulty, int d)
 	return 0;
 }
 
+
+
 int Solution_everyDay::LCP_41_flipChess(vector<string>& chessboard)
 {
 
@@ -728,11 +730,27 @@ int Solution_everyDay::LCP_41_flipChess(vector<string>& chessboard)
 	return 	reson;
 }
 
+/*1186. 删除一次得到子数组最大和
+给你一个整数数组，返回它的某个 非空 子数组（连续元素）在执行一次可选的删除操作后，所能得到的最大元素总和。
+换句话说，你可以从原数组中选出一个子数组，并可以决定要不要从中删除一个元素（只能删一次哦），（删除后）子数组中至少应当有一个元素，然后该子数组（剩下）的元素总和是所有子数组之中最大的。
+
+注意，删除一个元素后，子数组 不能为空。
+
+ 
+*/
+
 int Solution_everyDay::t1186_maximumSum(vector<int>& arr)
-{
-
-
-	return 0;
+{	
+	// 动态规划 + kadane算法， 简直离谱
+	// kadane算法： 求子序列最大和，Kadane算法扫描一次整个数列的所有数值，在每一个扫描点计算以该点数值为结束点的子数列的最大和（ 正数和 ）。
+	//该子数列由两部分组成：以前一个位置为结束点的最大子数列、该位置的数值。因为该算法用到了“最佳子结构”（以每个位置为终点的最大子数列都是基于其前一位置的最大子数列计算得出）
+	int dp0 = arr[0], dp1 = 0, res = 0;
+	for (int i = 1; i < arr.size(); i++) {
+		dp1 = max(dp0, dp1 + arr[i]);
+		dp0 = max(dp0, 0) + arr[i];
+		res = max(res, max(dp1, dp0));
+	}
+	return res;
 }
 
 
@@ -748,5 +766,7 @@ void  mapAdd(map<int, int>& map, vector<int> nums) {
 	}
 	else map[nums[0]] = nums[1];
 }
+
+
 
 
