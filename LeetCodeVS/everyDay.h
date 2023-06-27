@@ -14,6 +14,15 @@
 #include<set>
 using namespace std;
 
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode* next) : val(x), next(next) {}
+	
+};
+
 class Solution_everyDay
 {
 public:
@@ -74,6 +83,16 @@ public:
 
 	//1186. 删除一次得到子数组最大和
 	int t1186_maximumSum(vector<int>& arr); 
+
+	//1681. 最小不兼容性
+	int t1681_minimumIncompatibility(vector<int>& nums, int k);
+
+
+	//445. 两数相加 II
+	ListNode* t0445_addTwoNumbers(ListNode* l1, ListNode* l2);
+
+	//2178. 拆分成最多数目的正偶数之和
+	vector<long long> t2178_maximumEvenSplit(long long finalSum);
 private:
 
 };

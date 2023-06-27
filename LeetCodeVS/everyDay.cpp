@@ -2,6 +2,7 @@
 #include <functional>
 
 
+int dfs(ListNode*, int);
 
 /*1247. 交换字符使得字符串相同
 * 有两个长度相同的字符串 s1 和 s2，且它们其中 只含有 字符 "x" 和 "y"，你需要通过「交换字符」的方式使这两个字符串相同。
@@ -754,6 +755,110 @@ int Solution_everyDay::t1186_maximumSum(vector<int>& arr)
 }
 
 
+/*1681. 最小不兼容性
+给你一个整数数组 nums​​​ 和一个整数 k 。你需要将这个数组划分到 k 个相同大小的子集中，使得同一个子集里面没有两个相同的元素。
+
+一个子集的 不兼容性 是该子集里面最大值和最小值的差。
+
+请你返回将数组分成 k 个子集后，各子集 不兼容性 的 和 的 最小值 ，如果无法分成分成 k 个子集，返回 - 1 。
+
+子集的定义是数组中一些数字的集合，对数字顺序没有要求。
+*/
+int Solution_everyDay::t1681_minimumIncompatibility(vector<int>& nums, int k)
+{
+	// 先 判断下能否划分为k个大小相同的子集？即相同数字是否大于k？
+	// 排序后用贪心算法？ 
+	vector <int> nums_s(nums.size()+1, 0);
+	vector < vector<int> > nums_son(k);
+	int s = 0 , res= 0 , m = nums.size()/k;
+	sort(nums.begin(), nums.end());
+	for (auto a : nums) {
+		// 数量+1
+		nums_s[a]++;
+
+		// 子序列已满
+		if (nums_son[s].size() == m) {
+			while (nums_son[s].size() == m) {
+				s++;
+			}
+			nums_son[s].push_back(a);
+		}
+		else {
+			if (nums_s[a] > m)
+				return -1;
+			else if (nums_s[a] + s <= k)
+				nums_son[s - 1 + nums_s[a]].push_back(a);
+			else
+				nums_son[k - nums_s[a]].push_back(a);
+		}
+	}
+	
+	for (auto a : nums_son) {
+		res += *(a.end() - 1) - *(a.begin());
+	}
+
+	return res;
+}
+
+ListNode* Solution_everyDay::t0445_addTwoNumbers(ListNode* l1, ListNode* l2)
+{
+	int sz1 = 0, sz2 = 0 , dis = 0;
+	auto h1 = l1;
+	auto h2 = l2;
+	while (l1 || l2) {
+		if (l1) sz1++;
+		if (l2) sz2++;
+		l1->next;
+		l2->next;
+	}
+	auto l = sz1 > sz2 ? h1 : h2;
+	auto s = sz1 < sz2 ? h1 : h2;
+	dis = abs(sz1 - sz2);
+	// 递归调用 
+	if (dfs(l, s, dis)) {
+		ListNode* prep = new ListNode(1, l);
+		l = prep;
+	}
+	return l;
+}
+/*2178. 拆分成最多数目的正偶数之和
+给你一个整数 finalSum 。请你将它拆分成若干个 互不相同 的正偶数之和，且拆分出来的正偶数数目 最多 。
+比方说，给你 finalSum = 12 ，那么这些拆分是 符合要求 的（互不相同的正偶数且和为 finalSum）：(2 + 10) ，(2 + 4 + 6) 和 (4 + 8) 。
+它们中，(2 + 4 + 6) 包含最多数目的整数。注意 finalSum 不能拆分成 (2 + 2 + 4 + 4) ，因为拆分出来的整数必须互不相同。
+请你返回一个整数数组，表示将整数拆分成 最多 数目的正偶数数组。如果没有办法将 finalSum 进行拆分，请你返回一个 空 数组。你可以按 任意 顺序返回这些整数。
+*/
+vector<long long> Solution_everyDay::t2178_maximumEvenSplit(long long finalSum)
+{
+	if (finalSum % 2 == 1) return {};
+	vector<long long > res;
+	for (long i = 2; i * 2 < finalSum; i += 2) {
+		res.push_back(i);
+		finalSum -= i;
+	}
+	res.push_back(finalSum);
+	return res;
+}
+
+int dfs (ListNode* l, ListNode* s, int dis) {
+	int sum;
+	if (!(l->next || s->next)) {
+		sum = l->val + s->val;
+		l->val = sum % 10;
+		return sum / 10;
+	}
+	else
+	{
+		if (dis) {
+			sum = l->val + dfs(l->next, s, dis--);
+		}
+		else {
+			sum = l->val + s->val + dfs(l->next, s->next, 0);
+		}
+
+		l->val = sum % 10;
+		return sum / 10;
+	}
+}
 
 
 
