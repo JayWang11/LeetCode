@@ -130,15 +130,7 @@
     <ClCompile Include="arithmetic.cpp" />
     <ClCompile Include="everyDay.cpp" />
     <ClCompile Include="MainTest.cpp" />
-    <ClCompile Include="t001.cpp" />
-    <ClCompile Include="t002.cpp" />
-    <ClCompile Include="t007.cpp" />
-    <ClCompile Include="t008.cpp" />
-    <ClCompile Include="t009.cpp" />
-    <ClCompile Include="t010(hard).cpp" />
-    <ClCompile Include="t011.cpp" />
-    <ClCompile Include="t012(贪心算法).cpp" />
-    <ClCompile Include="t015.cpp" />
+    <ClCompile Include="t001_t100.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arithmetic.h" />

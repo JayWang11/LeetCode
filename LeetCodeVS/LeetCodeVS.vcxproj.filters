@@ -27,31 +27,7 @@
     <ClCompile Include="MainTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="t001.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t002.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t007.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t008.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t009.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t010(hard).cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t011.cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t012(贪心算法).cpp">
-      <Filter>源文件\t001_100</Filter>
-    </ClCompile>
-    <ClCompile Include="t015.cpp">
+    <ClCompile Include="t001_t100.cpp">
       <Filter>源文件\t001_100</Filter>
     </ClCompile>
     <ClCompile Include="arithmetic.cpp">
