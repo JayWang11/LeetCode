@@ -866,6 +866,7 @@ string Solution_everyDay::t0648_replaceWords(vector<string>& dictionary, string 
 	vector<string> sp = split(sentence, ' ');
 	string ret;
 	for (auto w : sp) {
+		if (!ret.empty()) ret += ' ';
 		ret += findRoot(w, trie);
 	}
 	return ret;
