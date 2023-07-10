@@ -2,7 +2,7 @@
 #include <functional>
 
 
-int dfs(ListNode*, int);
+int dfs(ListNode*, ListNode* , int);
 
 /*1247. 交换字符使得字符串相同
 * 有两个长度相同的字符串 s1 和 s2，且它们其中 只含有 字符 "x" 和 "y"，你需要通过「交换字符」的方式使这两个字符串相同。
@@ -230,6 +230,8 @@ string Solution_everyDay::m0502_printBin(double num)
 		}
 		return res;
 }
+
+
 
 vector<string> Solution_everyDay::t1487_getFolderNames(vector<string>& names)
 {
@@ -638,7 +640,6 @@ int Solution_everyDay::t1335_minDifficulty(vector<int>& jobDifficulty, int d)
 	else if (jobDifficulty.size() == d || d == 1) {
 		return accumulate(jobDifficulty.begin(), jobDifficulty.end(),0);
 	}
-
 	return 0;
 }
 
@@ -800,6 +801,8 @@ int Solution_everyDay::t1681_minimumIncompatibility(vector<int>& nums, int k)
 	return res;
 }
 
+
+
 ListNode* Solution_everyDay::t0445_addTwoNumbers(ListNode* l1, ListNode* l2)
 {
 	int sz1 = 0, sz2 = 0 , dis = 0;
@@ -821,6 +824,8 @@ ListNode* Solution_everyDay::t0445_addTwoNumbers(ListNode* l1, ListNode* l2)
 	}
 	return l;
 }
+
+
 /*2178. 拆分成最多数目的正偶数之和
 给你一个整数 finalSum 。请你将它拆分成若干个 互不相同 的正偶数之和，且拆分出来的正偶数数目 最多 。
 比方说，给你 finalSum = 12 ，那么这些拆分是 符合要求 的（互不相同的正偶数且和为 finalSum）：(2 + 10) ，(2 + 4 + 6) 和 (4 + 8) 。
@@ -839,6 +844,35 @@ vector<long long> Solution_everyDay::t2178_maximumEvenSplit(long long finalSum)
 	return res;
 }
 
+
+/*648. 单词替换
+在英语中，我们有一个叫做 词根(root) 的概念，可以词根后面添加其他一些词组成另一个较长的单词——我们称这个词为 继承词(successor)。例如，词根an，跟随着单词 other(其他)，可以形成新的单词 another(另一个)。
+现在，给定一个由许多词根组成的词典 dictionary 和一个用空格分隔单词形成的句子 sentence。你需要将句子中的所有继承词用词根替换掉。如果继承词有许多可以形成它的词根，则用最短的词根替换它。
+你需要输出替换之后的句子。
+*/
+string Solution_everyDay::t0648_replaceWords(vector<string>& dictionary, string sentence)
+{
+	Trie* trie = new Trie();
+	// 构建字典树 
+	for (auto& d : dictionary) {
+		Trie* cur = trie;
+		for (auto& c : d) {
+			if (!cur->children.count(c))
+				cur->children[c] = new Trie();
+			cur = cur->children[c];
+		}
+		cur->children['#'] = new Trie();
+	}
+	vector<string> sp = split(sentence, ' ');
+	string ret;
+	for (auto w : sp) {
+		ret += findRoot(w, trie);
+	}
+	return ret;
+}
+
+
+//深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {
 	int sum;
 	if (!(l->next || s->next)) {

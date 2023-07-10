@@ -1,11 +1,7 @@
 #pragma once
-#include<iostream>
-#include<stdio.h>
-#include<vector>
-#include<math.h>
-#include<algorithm>
-#include<stack>
-#include<set>
+
+#include"tool.h"
+
 using namespace std;
 
 
@@ -19,6 +15,9 @@ public:
     string t005_longestPalindrome(string s);
     // 6. N 字形变换
     string t006_convert(string s, int numRows);
+    // 10. 正则表达式匹配
+    bool t010_isMatch(string s, string p);
+
     // 15. 三数之和
     vector<vector<int>> t015_threeSum(vector<int>& nums);
     // 18. 四数之和
@@ -27,12 +26,4 @@ public:
     // 20. 有效的括号
     bool t020_isValid(string s);
 private:
-};
-
-struct ListNode {
-    int val;
-    ListNode* next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode* next) : val(x), next(next) {}
 };

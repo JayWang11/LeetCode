@@ -226,6 +226,37 @@ string Solution_LeetCodeT100::t006_convert(string s, int numRows = 3)
     return newS;
 }
 
+
+
+bool Solution_LeetCodeT100::t010_isMatch(string s, string p)
+{
+
+    // 动态规划 ，用 dp[i][j] 表示 p前j个元素是否能和s的前i个元素进行匹配·
+    vector<vector<int>> dp(p.size() + 1, vector<int>(s.size() + 1, 0));
+    for (auto &dp1 : dp)
+        dp1[0] = 1;
+    int i = 1, j = 1 ,index = 1;
+    char  t;
+    while (j - 1 < p.size()) {
+
+        if (p[j - 1] == '*') { 
+            t = p[j - 2];
+        }
+        else t = p[j - 1];
+        for (i = index; i <= s.size(); i++) {
+            if( t==s[i-1] || t == '.')
+            dp[j ][i ] = min(dp[j - 1][i - 1] , 1);
+            if (p[j - 1] == '*') {
+                dp[j][i] = max(dp[j][i], dp[j - 1][i]);
+            }
+        }
+        index += dp[j - 1][index] == 1 ? 1 : 0;
+        if (index >= s.size() && j <= p.size()) return false;
+        j++;
+    }
+    return dp[p.size()][s.size()] ;
+}
+
 //
 /*15. 三数之和
 给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请

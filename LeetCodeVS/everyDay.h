@@ -12,19 +12,14 @@
 #include<deque>
 #include<queue>
 #include<set>
+#include"tool.h"
 using namespace std;
 
-struct ListNode {
-	int val;
-	ListNode* next;
-	ListNode() : val(0), next(nullptr) {}
-	ListNode(int x) : val(x), next(nullptr) {}
-	ListNode(int x, ListNode* next) : val(x), next(next) {}
-	
-};
+
 
 class Solution_everyDay
 {
+
 public:
 
 	//1247. 交换字符使得字符串相同
@@ -93,8 +88,46 @@ public:
 
 	//2178. 拆分成最多数目的正偶数之和
 	vector<long long> t2178_maximumEvenSplit(long long finalSum);
+
+	//648. 单词替换
+	string t0648_replaceWords(vector<string>& dictionary, string sentence);
+
 private:
 
+	// 工具 函数 
+	
+	//648 ,String 切分函数
+	vector<string> split(string& str, char ch) {
+		int pos = 0;
+		int start = 0;
+		vector<string> ret;
+		while (pos < str.size()) {
+			while (pos < str.size() && str[pos] == ch)
+				pos++;
+			start = pos;
+			while (pos < str.size() && str[pos] != ch) 
+				pos++;
+			if (start < str.size())
+				ret.push_back(str.substr(start, pos - start));
+		}
+		return ret;
+	}
+
+	//648 ，在字典树中查找单词的最短前缀。
+	string findRoot(string& str, Trie* root) {
+		Trie* cur = root;
+		string ret;
+		for (auto c : str) {
+			// 前提： 字典树不为空 ， 探索到底层 ，返回
+			if (cur->children.count('#'))
+				return ret;
+			// 只有根节点下没有 的情况才会直接返回str;
+			if (!cur->children.count(c))
+				return str;
+			ret.push_back(c);
+			cur = cur->children[c];
+		}
+	}
 };
 
 

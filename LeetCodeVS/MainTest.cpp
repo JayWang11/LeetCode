@@ -101,7 +101,7 @@ int main() {
 	vector<int> test_3 = { 36,41,21,10,49,49,17,44,48,18 };
 	string s = "RRLLRLLLLL";
 	
-	vector<string> words = { "adbc","caaa","deadc","ecbd","ecdd","abdb" };
+	vector<string> words = { "cat","bat","rat" };
 	vector<string> names = { "kaido","kaido(1)","kaido","kaido(1)","kaido(2)" };
 
 	vector<vector<int>> list_2 = { {2,3}, {0,3} ,{0,4}, {4,1} };
@@ -119,9 +119,16 @@ int main() {
 	//cout <<s_e.t1186_maximumSum(test_1);
 	//cout << MaxSonList(test_1);
 	//cout << s_e.t1681_minimumIncompatibility(test_1, 4);
+	s_e.t0648_replaceWords({words } ,"the cattle was rattled by the battery" );
+
 
 	//survivedRobotsHealths(test_2 ,test_3 , s);
-	vector<int> p = { };
+
+
+
+	// t100 À¢Ã‚
+
+	//s_t100.t010_isMatch( "aab" , "ac*a*b");
 
 
 }
