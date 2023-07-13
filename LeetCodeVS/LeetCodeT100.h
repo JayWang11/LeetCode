@@ -25,5 +25,11 @@ public:
     vector<vector<int>> t018_fourSum(vector<int>& nums, int target); //下标版本
     // 20. 有效的括号
     bool t020_isValid(string s);
+
+    //22. 括号生成
+    vector<string> t022_generateParenthesis(int n);
 private:
+
+    //22 深度遍历辅助函数
+    bool t022_dfs(const string& s, const int& b, int& n, const int& l, const int& r, vector<string>& res);
 };

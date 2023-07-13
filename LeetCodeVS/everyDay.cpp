@@ -765,6 +765,7 @@ int Solution_everyDay::t1186_maximumSum(vector<int>& arr)
 
 子集的定义是数组中一些数字的集合，对数字顺序没有要求。
 */
+
 int Solution_everyDay::t1681_minimumIncompatibility(vector<int>& nums, int k)
 {
 	// 先 判断下能否划分为k个大小相同的子集？即相同数字是否大于k？
@@ -802,7 +803,7 @@ int Solution_everyDay::t1681_minimumIncompatibility(vector<int>& nums, int k)
 }
 
 
-
+	
 ListNode* Solution_everyDay::t0445_addTwoNumbers(ListNode* l1, ListNode* l2)
 {
 	int sz1 = 0, sz2 = 0 , dis = 0;
@@ -852,6 +853,8 @@ vector<long long> Solution_everyDay::t2178_maximumEvenSplit(long long finalSum)
 */
 string Solution_everyDay::t0648_replaceWords(vector<string>& dictionary, string sentence)
 {
+	map<int, int, greater<int>> stock_t_p;
+	stock_t_p.begin()->second;
 	Trie* trie = new Trie();
 	// 构建字典树 
 	for (auto& d : dictionary) {
@@ -870,6 +873,24 @@ string Solution_everyDay::t0648_replaceWords(vector<string>& dictionary, string 
 		ret += findRoot(w, trie);
 	}
 	return ret;
+}
+
+int Solution_everyDay::t0931_minFallingPathSum(vector<vector<int>>& matrix)
+{
+	//动态规划
+	int m=0;
+	for (int i = 1; i < matrix.size(); i++) {
+		int j = 0;
+		matrix[i][j] += min(matrix[i - 1][j], matrix[i - 1][j + 1]);
+		for (j = 1; j < matrix.size() - 1; j++) {
+			matrix[i][j] += min(matrix[i - 1][j], min(matrix[i - 1][j - 1], matrix[i - 1][j + 1]));
+		}
+		matrix[i][j] += min(matrix[i - 1][j], matrix[i - 1][j - 1]);
+	}
+	m = matrix[matrix.size()-1][0];
+	for (auto& p : matrix[matrix.size() - 1])
+		m = min(m, p);
+	return m;
 }
 
 

@@ -233,28 +233,42 @@ bool Solution_LeetCodeT100::t010_isMatch(string s, string p)
 
     // 动态规划 ，用 dp[i][j] 表示 p前j个元素是否能和s的前i个元素进行匹配·
     vector<vector<int>> dp(p.size() + 1, vector<int>(s.size() + 1, 0));
-    for (auto &dp1 : dp)
+    for (auto& dp1 : dp)
         dp1[0] = 1;
-    int i = 1, j = 1 ,index = 1;
+    int i , j = 1, index = 0, flag = 0;
     char  t;
     while (j - 1 < p.size()) {
-
-        if (p[j - 1] == '*') { 
-            t = p[j - 2];
-        }
-        else t = p[j - 1];
-        for (i = index; i <= s.size(); i++) {
-            if( t==s[i-1] || t == '.')
-            dp[j ][i ] = min(dp[j - 1][i - 1] , 1);
-            if (p[j - 1] == '*') {
-                dp[j][i] = max(dp[j][i], dp[j - 1][i]);
+        t = p[j - 1];
+        if (j < p.size() && p[j] == '*') {
+            dp[j][index] = dp[j - 1][index];
+            dp[j+1][index] = dp[j][index];
+            for ( i = index+1; i <= s.size(); i++ ) {
+                dp[j][i] = int (dp[j-1][i] || 
+                    min( int(dp[j - 1][i - 1] || dp[j][i-1]), int(s[i - 1] == t || t == '.')));
+                dp[j + 1][i] = dp[j][i];
             }
+            j += 2;
         }
-        index += dp[j - 1][index] == 1 ? 1 : 0;
-        if (index >= s.size() && j <= p.size()) return false;
-        j++;
+        else {
+            index++;
+            for ( i = index; i <= s.size(); i++) {
+                dp[j][i] = min(dp[j - 1][i - 1], int(s[i - 1] == t || t == '.'));
+                if (dp[j][i]) {
+                    index = min(index, i);
+                }
+            }
+            j++;
+        }
+        if (index > s.size()) return false;
     }
-    return dp[p.size()][s.size()] ;
+    for (auto &d : dp) {
+        for (auto& p : d)
+            cout << p << " ";
+        cout << endl;
+    }
+    cout << dp[p.size()][s.size()];
+    if (index > s.size()) return false;
+    return dp[p.size()][s.size()];
 }
 
 //
@@ -411,3 +425,40 @@ bool Solution_LeetCodeT100::t020_isValid(string s)
     if (list.empty()) return true;
     else return false;
 }
+
+/*22. 括号生成
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+*/
+
+vector<string> Solution_LeetCodeT100::t022_generateParenthesis(int n)
+{
+
+    //dfs 深度遍历 + 剪枝
+    if (n == 1) return{ "()" };
+
+    vector<string> res;
+    string s = "(";
+    int b = 1, l = 1, r = 0;
+    t022_dfs(s , b, n, l ,r,  res);
+
+    return res;
+}
+//22 深度遍历辅助函数
+bool Solution_LeetCodeT100::t022_dfs(const string& s, const int& b, int& n, const int& l, const int& r, vector<string>& res)
+{
+    if (b < 0) return 0;
+    else if (s.size() == n * 2)
+        res.push_back(s);
+    else {
+        if (l < n) {
+            t022_dfs(s + '(', b + 1, n, l + 1, r, res);
+        }
+        if (r < n) {
+            t022_dfs(s + ')', b - 1, n, l, r + 1, res);
+        }
+    }
+    return false;
+}
+
+

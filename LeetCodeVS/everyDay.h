@@ -92,6 +92,9 @@ public:
 	//648. 单词替换
 	string t0648_replaceWords(vector<string>& dictionary, string sentence);
 
+	//931. 下降路径最小和
+	int t0931_minFallingPathSum(vector<vector<int>>& matrix);
+
 private:
 
 	// 工具 函数 
@@ -105,13 +108,13 @@ private:
 			while (pos < str.size() && str[pos] == ch)
 				pos++;
 			start = pos;
-			while (pos < str.size() && str[pos] != ch) 
+			while (pos < str.size() && str[pos] != ch)
 				pos++;
 			if (start < str.size())
 				ret.push_back(str.substr(start, pos - start));
 		}
 		return ret;
-	}
+	};
 
 	//648 ，在字典树中查找单词的最短前缀。
 	string findRoot(string& str, Trie* root) {
@@ -127,7 +130,8 @@ private:
 			ret.push_back(c);
 			cur = cur->children[c];
 		}
-	}
+		return ret;
+	};
 };
 
 

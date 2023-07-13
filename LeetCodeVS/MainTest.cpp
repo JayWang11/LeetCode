@@ -104,7 +104,7 @@ int main() {
 	vector<string> words = { "cat","bat","rat" };
 	vector<string> names = { "kaido","kaido(1)","kaido","kaido(1)","kaido(2)" };
 
-	vector<vector<int>> list_2 = { {2,3}, {0,3} ,{0,4}, {4,1} };
+	vector<vector<int>> list_2 = { {2,1,3},{6,5,4},{7,8,9} };
 	vector<string> list_3 = { "....X.","....X.","XOOO..","......","......" };
 
 	vector<int> x = { 4,12,10,1,0 };
@@ -119,8 +119,8 @@ int main() {
 	//cout <<s_e.t1186_maximumSum(test_1);
 	//cout << MaxSonList(test_1);
 	//cout << s_e.t1681_minimumIncompatibility(test_1, 4);
-	s_e.t0648_replaceWords({words } ,"the cattle was rattled by the battery" );
-
+	//s_e.t0648_replaceWords({words } ,"the cattle was rattled by the battery" );
+	s_e.t0931_minFallingPathSum(list_2);
 
 	//survivedRobotsHealths(test_2 ,test_3 , s);
 
@@ -128,7 +128,7 @@ int main() {
 
 	// t100 Ë¢Ìâ
 
-	//s_t100.t010_isMatch( "aab" , "ac*a*b");
+	//s_t100.t010_isMatch( "a" , ".*..a*");
 
 
 }
