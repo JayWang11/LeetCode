@@ -444,6 +444,32 @@ vector<string> Solution_LeetCodeT100::t022_generateParenthesis(int n)
 
     return res;
 }
+/*28. 找出字符串中第一个匹配项的下标
+给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回  -1 。
+*/
+int Solution_LeetCodeT100::t028_strStr(string haystack, string needle)
+{
+    if (needle.size() > haystack.size()) return -1;
+    vector<int> next(needle.size(), 0);
+    int pos = 0;
+    // 构造next
+    for (int i = 1; i < needle.size(); i++) {
+        while (needle[i] != needle[pos] && pos) {
+            pos = next[pos - 1];
+        }
+        if (needle[i] == needle[pos]) pos++;
+        next[i] = pos;
+    }
+    pos = 0;
+    //匹配 
+    for (int i = 0; i < haystack.size(); i++) {
+        while (haystack[i] != needle[pos] && pos) pos = next[pos - 1];
+        if (haystack[i] == needle[pos]) pos++;
+        if (pos == needle.size())
+            return i - pos + 1;
+    }
+    return -1;
+}
 //22 深度遍历辅助函数
 bool Solution_LeetCodeT100::t022_dfs(const string& s, const int& b, int& n, const int& l, const int& r, vector<string>& res)
 {

@@ -120,7 +120,7 @@ int main() {
 	//cout << MaxSonList(test_1);
 	//cout << s_e.t1681_minimumIncompatibility(test_1, 4);
 	//s_e.t0648_replaceWords({words } ,"the cattle was rattled by the battery" );
-	s_e.t0931_minFallingPathSum(list_2);
+	//s_e.t0931_minFallingPathSum(list_2);
 
 	//survivedRobotsHealths(test_2 ,test_3 , s);
 
@@ -129,6 +129,6 @@ int main() {
 	// t100 Ë¢Ìâ
 
 	//s_t100.t010_isMatch( "a" , ".*..a*");
-
+	cout<<s_t100.t028_strStr("aabaaabaaac" , "aabaaac");
 
 }
