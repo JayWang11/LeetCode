@@ -893,6 +893,66 @@ int Solution_everyDay::t0931_minFallingPathSum(vector<vector<int>>& matrix)
 	return m;
 }
 
+/*979. 在二叉树中分配硬币
+给定一个有 N 个结点的二叉树的根结点 root，树中的每个结点上都对应有 node.val 枚硬币，并且总共有 N 枚硬币。
+
+在一次移动中，我们可以选择两个相邻的结点，然后将一枚硬币从其中一个结点移动到另一个结点。(移动可以是从父结点到子结点，或者从子结点移动到父结点。)。
+
+返回使每个结点上只有一枚硬币所需的移动次数。
+*/
+int Solution_everyDay::t0979_distributeCoins(TreeNode* root)
+{
+	//  深度遍历 
+	int res = t0979_dfs(root, 0);
+	return res;
+}
+
+/*834. 树中距离之和
+给定一个无向、连通的树。树中有 n 个标记为 0...n-1 的节点以及 n-1 条边 。
+
+给定整数 n 和数组 edges ， edges[i] = [ai, bi]表示树中的节点 ai 和 bi 之间有一条边。
+
+返回长度为 n 的数组 answer ，其中 answer[i] 是树中第 i 个节点与所有其他节点之间的距离之和。
+*/
+vector<int> Solution_everyDay::t0834_sumOfDistancesInTree(int n, vector<vector<int>>& edges)
+
+{
+	// 换根dfs
+	if (n == 1 && edges.size() == 1) return{ 1 };
+	if (n == 1 && edges.size() == 0) return { 0 };
+	vector<vector<int>> dist(n);
+	vector<int> res(n,0);
+	vector<int> sonSum (n,1);
+	for (auto e : edges) {
+		dist[e[0]].push_back(e[1]);
+		dist[e[1]].push_back(e[0]);
+
+	}
+	function <void(int, int, int)> dfs = [&](int root, int father, int dep) {
+		res[0] += dep;
+		for (auto son : dist[root]) {
+			if (son != father) {
+				dfs(son, root, dep + 1);
+				sonSum[root]+= sonSum[son];
+				res[root] += res[son];
+			}
+		}
+	};
+	dfs(0, 0, 0);
+
+	function<void(int, int)> reRoot = [&](int root, int father) {
+		if (father != -1)
+			res[root] += res[father] + n - 2*sonSum[root];
+		for (auto& son : dist[root]) {
+			if (son != father) {
+				reRoot(son, root);
+			}
+		}
+	};
+	reRoot(0, -1);
+	return res;
+}
+
 
 //深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {

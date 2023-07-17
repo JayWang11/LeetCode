@@ -95,6 +95,12 @@ public:
 	//931. 下降路径最小和
 	int t0931_minFallingPathSum(vector<vector<int>>& matrix);
 
+	//979. 在二叉树中分配硬币
+	int t0979_distributeCoins(TreeNode* root);
+
+	//834. 树中距离之和
+	vector<int> t0834_sumOfDistancesInTree(int n, vector<vector<int>>& edges);
+
 private:
 
 	// 工具 函数 
@@ -132,6 +138,39 @@ private:
 		}
 		return ret;
 	};
+
+	//979 二叉树遍历
+	int t0979_dfs(TreeNode* root, int score) {
+
+		if (root->left) {
+			t0979_dfs(root->left, score);
+			root->val += root->left->val;
+			score += abs(1 - root->left->val);
+		}
+		if (root->right) {
+			t0979_dfs(root->right, score);
+			root->val += root->right->val;
+			score += abs(1 - root->right->val);
+		}
+		return root->val - 3;
+	}
+
+	//834 树的路径寻找
+	int t0834_dist(int  start, int end, int &n ,  vector<vector<int>> dist) {
+		for (int i = 0; i < n; i++) {
+			if (i == end) continue;
+			if (dist[start][i] > 0) {
+				if (dist[i][end] < 0) {
+					dist[i][end] = t0834_dist(i, end, n, dist);
+				}
+				if (dist[start][end] > 0)
+					dist[start][end] = min(dist[start][end], dist[i][end] + dist[start][i]);
+				else
+					dist[start][end] = dist[i][end] + dist[start][i];
+
+			}
+		}
+	}
 };
 
 
