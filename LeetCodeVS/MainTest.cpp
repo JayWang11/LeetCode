@@ -96,15 +96,15 @@ int removeDuplicates(vector<int>& nums) {
 }
 
 int main() {
-    vector<int> test_1 = { 6,3,8,1,3,1,2,2 };
+    vector<int> test_1 = { 5,7,7,8,8,10 };
 	vector<int> test_2 = { 20,47,39,28,3,7,12,1,37,33 };
 	vector<int> test_3 = { 36,41,21,10,49,49,17,44,48,18 };
 	string s = "RRLLRLLLLL";
 	
-	vector<string> words = { "cat","bat","rat" };
+	vector<string> words = {"aa" , "aa" };
 	vector<string> names = { "kaido","kaido(1)","kaido","kaido(1)","kaido(2)" };
 
-	vector<vector<int>> list_2 = { {2,1,3},{6,5,4},{7,8,9} };
+	vector<vector<int>> list_2 = { {0,1},{0,2},{2,3} , {2,4} ,{2,5} };
 	vector<string> list_3 = { "....X.","....X.","XOOO..","......","......" };
 
 	vector<int> x = { 4,12,10,1,0 };
@@ -121,6 +121,8 @@ int main() {
 	//cout << s_e.t1681_minimumIncompatibility(test_1, 4);
 	//s_e.t0648_replaceWords({words } ,"the cattle was rattled by the battery" );
 	//s_e.t0931_minFallingPathSum(list_2);
+	//s_e.t0834_sumOfDistancesInTree(6, list_2);
+
 
 	//survivedRobotsHealths(test_2 ,test_3 , s);
 
@@ -129,6 +131,13 @@ int main() {
 	// t100 Ë¢Ìâ
 
 	//s_t100.t010_isMatch( "a" , ".*..a*");
-	cout<<s_t100.t028_strStr("aabaaabaaac" , "aabaaac");
+	//cout<<s_t100.t028_strStr("aabaaabaaac" , "aabaaac");
+	//cout << s_t100.t029_divide(INT_MIN , 3);
+	//s_t100.t030_findSubstring("aaaaaaaaaaaaaa", words);
+	//s_t100.t031_nextPermutation(test_1);
+	//s_t100.t032_longestValidParentheses(")()())");
+	auto t = s_t100.t034_searchRange(test_1, 8);
+
+	cout << endl;
 
 }

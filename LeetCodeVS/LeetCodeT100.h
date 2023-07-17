@@ -31,11 +31,34 @@ public:
 
     //28. 找出字符串中第一个匹配项的下标
     int t028_strStr(string haystack, string needle);
+
+    //29. 两数相除
+    int t029_divide(int dividend, int divisor);
+
+    //30. 串联所有单词的子串
+    vector<int> t030_findSubstring(string s, vector<string>& words);
+
+    //31. 下一个排列
+    void t031_nextPermutation(vector<int>& nums);
+
+    //32. 最长有效括号
+    int t032_longestValidParentheses(string s);
+
+    //33. 搜索旋转排序数组
+    int t033_search(vector<int>& nums, int target);
+
+    //33. 搜索旋转排序数组
+    vector<int> t034_searchRange(vector<int>& nums, int target);
+    
+    //35. 搜索插入位置
+    int t035_searchInsert(vector<int>& nums, int target);
+
 private:
 
     //22 深度遍历辅助函数
     bool t022_dfs(const string& s, const int& b, int& n, const int& l, const int& r, vector<string>& res);
 
-
+    //30 深度遍历辅助函数
+    void dfs_str(string& s, string s_w, int& s_len, vector<string>& words, vector<int>& res, vector<bool>& index);
 
 };

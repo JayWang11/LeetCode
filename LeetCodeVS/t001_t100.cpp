@@ -430,25 +430,24 @@ bool Solution_LeetCodeT100::t020_isValid(string s)
 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
 
 */
-
 vector<string> Solution_LeetCodeT100::t022_generateParenthesis(int n)
 {
 
     //dfs 深度遍历 + 剪枝
     if (n == 1) return{ "()" };
-
     vector<string> res;
     string s = "(";
     int b = 1, l = 1, r = 0;
     t022_dfs(s , b, n, l ,r,  res);
-
     return res;
 }
+
 /*28. 找出字符串中第一个匹配项的下标
 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回  -1 。
 */
 int Solution_LeetCodeT100::t028_strStr(string haystack, string needle)
 {
+    // kmp算法
     if (needle.size() > haystack.size()) return -1;
     vector<int> next(needle.size(), 0);
     int pos = 0;
@@ -470,6 +469,270 @@ int Solution_LeetCodeT100::t028_strStr(string haystack, string needle)
     }
     return -1;
 }
+
+
+/*29. 两数相除
+给你两个整数，被除数 dividend 和除数 divisor。将两数相除，要求 不使用 乘法、除法和取余运算。
+
+整数除法应该向零截断，也就是截去（truncate）其小数部分。例如，8.345 将被截断为 8 ，-2.7335 将被截断至 -2 。
+
+返回被除数 dividend 除以除数 divisor 得到的 商 。
+
+注意：假设我们的环境只能存储 32 位 有符号整数，其数值范围是 [−231,  231 − 1] 。本题中，如果商 严格大于 231 − 1 ，则返回 231 − 1 ；如果商 严格小于 -231 ，则返回 -231 。
+
+ */
+int Solution_LeetCodeT100::t029_divide(int dividend, int divisor)
+{
+    if (dividend == INT_MIN) {
+        if (divisor == 1)
+            return dividend;
+        if (divisor == -1)
+            return INT_MAX;
+    }
+    if (dividend == divisor) return 1;
+    long long dd = dividend, ds = divisor;
+    int flag = 1, res = 0, n = 31;
+    if (dividend < 0) {
+        flag *= -1;
+        dd *= -1;
+    }
+    if (divisor < 0) {
+        flag *= -1;
+        ds = -ds;
+    }
+    while (dd >= ds) {
+        while (dd >> n < ds) {
+            n--;
+        }
+        res += 1 << n;
+        dd -= ds << n;
+    }
+    return res * flag;
+ 
+}
+
+/*30. 串联所有单词的子串
+给定一个字符串 s 和一个字符串数组 words。 words 中所有字符串 长度相同。
+ s 中的 串联子串 是指一个包含  words 中所有字符串以任意顺序排列连接起来的子串。
+例如，如果 words = ["ab","cd","ef"]， 那么 "abcdef"， "abefcd"，"cdabef"， "cdefab"，"efabcd"， 和 "efcdab" 都是串联子串。 "acdbef" 不是串联子串，因为他不是任何 words 排列的连接。
+返回所有串联字串在 s 中的开始索引。你可以以 任意顺序 返回答案。
+*/
+vector<int> Solution_LeetCodeT100::t030_findSubstring(string s, vector<string>& words)
+{
+    // 滑动窗口
+    unordered_map < string, int> words_m;
+    unordered_map < string, int> words_t;
+
+    vector<int> res;
+    int word_len = words[0].size() , word_n = words.size();
+    for (auto& w : words)
+        words_m[w]++;
+    // 三种开始区间
+    for (int i = 0; i < word_len; i++) {
+        int flag = 0 , start = i;
+        for (int j = i; j < s.size(); j += word_len) {
+            if (words_m[s.substr(j, word_len)]) {
+                words_t[s.substr(j, word_len)] ++;
+                flag++;
+
+                while (words_t[s.substr(j, word_len)] > words_m[s.substr(j, word_len)]) {
+                    words_t[s.substr(start, word_len)] --;
+                    start += word_len;
+                    flag--;
+                }
+                if (flag == word_n) {
+                    res.push_back(start);
+                    words_t[s.substr(start, word_len)] --;
+                    start += word_len;
+                    flag--;
+                }
+            }
+            else {
+                words_t.clear();
+                start = j + word_len;
+                flag = 0;
+
+            }
+        }
+        words_t.clear();
+
+    }
+    return res;
+}
+
+
+/*31. 下一个排列
+整数数组的一个 排列  就是将其所有成员以序列或线性顺序排列。
+例如，arr = [1,2,3] ，以下这些都可以视作 arr 的排列：[1,2,3]、[1,3,2]、[3,1,2]、[2,3,1] 。
+整数数组的 下一个排列 是指其整数的下一个字典序更大的排列。更正式地，如果数组的所有排列根据其字典顺序从小到大排列在一个容器中，那么数组的 下一个排列 就是在这个有序容器中排在它后面的那个排列。如果不存在下一个更大的排列，那么这个数组必须重排为字典序最小的排列（即，其元素按升序排列）。
+例如，arr = [1,2,3] 的下一个排列是 [1,3,2] 。
+类似地，arr = [2,3,1] 的下一个排列是 [3,1,2] 。
+而 arr = [3,2,1] 的下一个排列是 [1,2,3] ，因为 [3,2,1] 不存在一个字典序更大的排列。
+给你一个整数数组 nums ，找出 nums 的下一个排列。
+必须 原地 修改，只允许使用额外常数空间。
+*/
+void Solution_LeetCodeT100::t031_nextPermutation(vector<int>& nums) {
+
+    // 字典序 ： 在这题直观理解就是按照数值排序
+    if (nums.size() == 1);
+    else {
+        int flag = 1, len = nums.size() , pos = -1;
+        for (int i = len - 1; i > 0; i--) {
+            if (nums[i - 1] < nums[i]) {
+                pos = i-1;
+                i = 0;
+            }
+        }
+        if (pos == -1) {
+            // 全倒序
+            reverse(nums.begin(), nums.end());
+        }
+        else {
+            for (int i = len - 1; i > pos; i--) {
+                if (nums[i] > nums[pos]) {
+                    swap(nums[i], nums[pos]);
+                    break;
+                }
+            }
+            sort(nums.begin() + pos+1, nums.end());
+        }
+    }
+    for (auto& n : nums)
+        cout << n << endl;
+}
+
+/**/
+int Solution_LeetCodeT100::t032_longestValidParentheses(string s)
+{
+   // 栈
+    int res =0 ;
+    stack< int> stk;
+    // 最下面放一个'('
+    stk.push(-1);
+    for (int i = 0; i < s.size(); i++) {
+        // 遇到'(’ 入栈
+        if (s[i] == '(')
+            stk.push(i);
+        // ’）' 出栈，并用当前指针减去栈顶指针，就是该子括号串的最大连续值
+        else {
+            stk.pop();
+            if (stk.empty())
+                stk.push(i);
+            else {
+                res = max(res, i - stk.top());
+            }
+        }
+    }
+    return res;
+
+}
+
+/*33. 搜索旋转排序数组
+整数数组 nums 按升序排列，数组中的值 互不相同 。
+在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。
+例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+*/
+int Solution_LeetCodeT100::t033_search(vector<int>& nums, int target)
+{
+    if (target > *nums.rbegin() && target < *nums.begin()) return -1;
+    if (target == *nums.rbegin() || target == *nums.begin()) return target == *nums.begin() ? 0 : nums.size() - 1;
+    if (nums.size() == 1) return target == nums[0] ? nums[0] : -1;
+    int mid = (nums.size()-1) / 2, left = 0, right = nums.size() - 1;
+    if (target > *nums.begin()) {
+        while (nums[mid] != target && right > left) {
+            if (nums[mid] > target || nums[mid] < nums[left])
+                right = mid - 1;
+            else if (nums[mid] < target)
+                left = mid + 1;
+         
+            mid = (left + right) / 2;
+        }
+    }
+    else {
+        while (nums[mid] != target && right > left) {
+            if (nums[mid] > nums[right] || nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            mid = (left + right) / 2;
+        }
+    }
+    if (right <= left) return nums[left] == target ? left : -1;
+    else return mid;
+}
+
+/*34. 在排序数组中查找元素的第一个和最后一个位置
+给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+
+如果数组中不存在目标值 target，返回 [-1, -1]。
+
+你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+*/
+vector<int> Solution_LeetCodeT100::t034_searchRange(vector<int>& nums, int target)
+{
+    // 二分查找
+    int len = nums.size();
+    if (!len) return { -1,-1 };
+    vector<int> res(2);
+    auto find = [&](int l, int r, bool up) ->int {
+        while (l < r) {
+            // cout << "l :" << l << "  r :" << r << endl;
+            int mid = (l + r) / 2;
+            if (nums[mid] < target)
+                l = mid + 1;
+            else if (nums[mid] > target)
+                r = mid - 1;
+            else if (up && nums[max(0, mid - 1)] < target)
+                return mid;
+            else if (!up && nums[min(len - 1, mid + 1)] > target)
+                return mid;
+            else {
+                if (up) r = mid - 1;
+                else  l = mid + 1;
+            }
+        }
+        if (nums[l] == target) return l;
+        else return len;
+
+    };
+    res[0] = find(0, len - 1, true);
+    res[1] = find(0, len - 1, false);
+    if (res[0] < len && res[1] < len && nums[res[0]] == nums[res[1]] && nums[res[0]] == target)  return res;
+    return { -1,-1 };
+}
+
+/*
+* 35. 搜索插入位置
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+请必须使用时间复杂度为 O(log n) 的算法。
+*/
+int Solution_LeetCodeT100::t035_searchInsert(vector<int>& nums, int target)
+{
+    int l = 0, r = nums.size() - 1;
+    while (l < r) {
+        int mid = (l + r) / 2;
+        if (nums[mid] > target) {
+            r = mid - 1;
+        }
+        else if (nums[mid] < target)
+            l = mid + 1;
+        else return mid;
+    }
+    if (target > nums[l]) return l + 1;
+    // 加max是为了处理越界情况
+    else return max(0, l);
+}
+
+
+
+
+
+
+
+
 //22 深度遍历辅助函数
 bool Solution_LeetCodeT100::t022_dfs(const string& s, const int& b, int& n, const int& l, const int& r, vector<string>& res)
 {
@@ -485,6 +748,35 @@ bool Solution_LeetCodeT100::t022_dfs(const string& s, const int& b, int& n, cons
         }
     }
     return false;
+}
+
+//30 深度遍历辅助函数
+void Solution_LeetCodeT100::dfs_str(string& s, string s_w, int& s_len, vector<string>& words, vector<int>& res, vector<bool>& index)
+{
+    for (int i = 0; i < words.size(); i++) {
+        if (index[i]) {
+            string s_w_t = s_w;
+            vector<bool> index_t = index;
+            int pos = 0;
+            s_w_t += words[i];
+            index_t[i] = false;
+            auto k = s.find(s_w_t, pos);
+            while (k != string::npos) {
+                if (find(res.begin(), res.end(), k) != res.end()) {
+                }
+                else if (s_w_t.size() == s_len  ) {
+                    res.push_back(k);
+                }
+                else
+                    dfs_str(s, s_w_t, s_len, words, res, index_t);
+  /*              cout << "s_w_t ：" << s_w_t;
+                cout << "  s_w_t.size() ：" << s_w_t.size();
+                cout << "  s_len ：" << s_len << endl;*/
+                pos = k+1;
+                k = s.find(s_w_t, pos);
+            }
+        }
+    }
 }
 
 
