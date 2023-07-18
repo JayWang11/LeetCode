@@ -101,6 +101,9 @@ public:
 	//834. 树中距离之和
 	vector<int> t0834_sumOfDistancesInTree(int n, vector<vector<int>>& edges);
 
+	//1851. 包含每个查询的最小区间
+	vector<int> t1851_minInterval(vector<vector<int>>& intervals, vector<int>& queries);
+
 private:
 
 	// 工具 函数 

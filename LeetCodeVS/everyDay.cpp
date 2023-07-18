@@ -740,7 +740,6 @@ int Solution_everyDay::LCP_41_flipChess(vector<string>& chessboard)
 
  
 */
-
 int Solution_everyDay::t1186_maximumSum(vector<int>& arr)
 {	
 	// 动态规划 + kadane算法， 简直离谱
@@ -765,7 +764,6 @@ int Solution_everyDay::t1186_maximumSum(vector<int>& arr)
 
 子集的定义是数组中一些数字的集合，对数字顺序没有要求。
 */
-
 int Solution_everyDay::t1681_minimumIncompatibility(vector<int>& nums, int k)
 {
 	// 先 判断下能否划分为k个大小相同的子集？即相同数字是否大于k？
@@ -950,6 +948,39 @@ vector<int> Solution_everyDay::t0834_sumOfDistancesInTree(int n, vector<vector<i
 		}
 	};
 	reRoot(0, -1);
+	return res;
+}
+
+/*1851. 包含每个查询的最小区间
+给你一个二维整数数组 intervals ，其中 intervals[i] = [lefti, righti] 表示第 i 个区间开始于 lefti 、结束于 righti（包含两侧取值，闭区间）。区间的 长度 定义为区间中包含的整数数目，更正式地表达是 righti - lefti + 1 。
+再给你一个整数数组 queries 。第 j 个查询的答案是满足 lefti <= queries[j] <= righti 的 长度最小区间 i 的长度 。如果不存在这样的区间，那么答案是 -1 。
+以数组形式返回对应查询的所有答案。
+*/
+vector<int> Solution_everyDay::t1851_minInterval(vector<vector<int>>& intervals, vector<int>& queries)
+{
+	// 记录 各组
+	map < int, vector<int>> in_len;
+	// pair : 1: 有边界， 2：长度
+	set<pair<int, int>> point;
+	vector<int> res( queries.size(),-1);
+	int j = 0;
+	for (auto& i : intervals) {
+		in_len[i[1] - i[0] + 1].push_back(j);
+		j++;
+	}
+	j = 0;
+	for (auto& p : queries) {
+		point.emplace(p, j);
+		j++;
+	}
+	for (auto& len : in_len) {
+		for (auto& i : len.second) {
+			//lower_bound() 函数用于在指定区域内查找不小于目标值的第一个元素。
+			auto it = point.lower_bound({ intervals[i][0] , -1 });
+			while (it->first < intervals[i][1])
+				res[it->second] = len.first;
+		}
+	}
 	return res;
 }
 
