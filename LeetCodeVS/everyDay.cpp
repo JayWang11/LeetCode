@@ -985,6 +985,56 @@ vector<int> Solution_everyDay::t1851_minInterval(vector<vector<int>>& intervals,
 }
 
 
+/*874. 模拟行走机器人
+机器人在一个无限大小的 XY 网格平面上行走，从点 (0, 0) 处开始出发，面向北方。该机器人可以接收以下三种类型的命令 commands ：
+	-2 ：向左转 90 度
+	-1 ：向右转 90 度
+	1 <= x <= 9 ：向前移动 x 个单位长度
+在网格上有一些格子被视为障碍物 obstacles 。第 i 个障碍物位于网格点  obstacles[i] = (xi, yi) 。
+机器人无法走到障碍物上，它将会停留在障碍物的前一个网格方块上，但仍然可以继续尝试进行该路线的其余部分。
+返回从原点到机器人所有经过的路径点（坐标为整数）的最大欧式距离的平方。（即，如果距离为 5 ，则返回 25 ）
+注意：
+北表示 +Y 方向。
+东表示 +X 方向。
+南表示 -Y 方向。
+西表示 -X 方向。
+*/
+int Solution_everyDay::t0874_robotSim(vector<int>& commands, vector<vector<int>>& obstacles)
+{
+	// 记录最远位置 （可否省略？)
+	// 记录当前位置
+	// 障碍物碰撞检测
+	int Max = 0, d = 0;
+	vector<int > pos = { 0 , 0 };
+	set<int> obs;
+	// 用加密 把二维坐标转换成 一维数组， 再配合set 大幅优化 速度和空间！！！
+	for (auto& o : obstacles) {
+		obs.insert(o[0] * 6001 + o[1]);
+	}
+	// row[x]{y} cow[y]{x}
+	vector<pair<int, int>> dict = { {0,1} ,{ 1,0} , { 0, -1} ,{-1,0} };
+	for (auto& c : commands) {
+		if (c < 0) {
+			d = (d + 4 + (c == -1 ? 1 : -1)) % 4;
+		}
+		else {
+			// 碰撞检测 
+			for (int i = 1; i <= c; i++) {
+				pos = { pos[0] + dict[d].first , pos[1] + dict[d].second };
+				if (obs.find(pos[0]*6001+ pos[1]) != obs.end()) {
+					pos = { pos[0] - dict[d].first  , pos[1] - dict[d].second };
+					i = c;
+				}
+
+			}
+			Max = max(Max, pos[0] * pos[0] + pos[1] * pos[1]);
+		}
+	}
+	//Max = max(Max, pos.first * pos.first + pos.second * pos.second);
+	return Max;
+}
+
+
 //深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {
 	int sum;

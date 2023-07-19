@@ -104,6 +104,9 @@ public:
 	//1851. 包含每个查询的最小区间
 	vector<int> t1851_minInterval(vector<vector<int>>& intervals, vector<int>& queries);
 
+	//874. 模拟行走机器人
+	int t0874_robotSim(vector<int>& commands, vector<vector<int>>& obstacles);
+
 private:
 
 	// 工具 函数 
