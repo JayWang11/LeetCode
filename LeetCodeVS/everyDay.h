@@ -107,6 +107,18 @@ public:
 	//874. 模拟行走机器人
 	int t0874_robotSim(vector<int>& commands, vector<vector<int>>& obstacles);
 
+	//918. 环形子数组的最大和
+	int t0918_maxSubarraySumCircular(vector<int>& nums);
+
+	//1499. 满足不等式的最大值
+	int t1499_findMaxValueOfEquation(vector<vector<int>>& points, int k);
+
+	//2208. 将数组和减半的最少操作次数
+	int t2208_halveArray(vector<int>& nums);
+	
+	//2569. 更新数组后处理求和查询
+	vector<long long> t2569_handleQuery(vector<int>& nums1, vector<int>& nums2, vector<vector<int>>& queries);
+
 private:
 
 	// 工具 函数 

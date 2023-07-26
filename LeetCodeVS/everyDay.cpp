@@ -1035,6 +1035,134 @@ int Solution_everyDay::t0874_robotSim(vector<int>& commands, vector<vector<int>>
 }
 
 
+/*918. 环形子数组的最大和
+给定一个长度为 n 的环形整数数组 nums ，返回 nums 的非空 子数组 的最大可能和 。
+环形数组 意味着数组的末端将会与开头相连呈环状。形式上， nums[i] 的下一个元素是 nums[(i + 1) % n] ， nums[i] 的前一个元素是 nums[(i - 1 + n) % n] 。
+子数组 最多只能包含固定缓冲区 nums 中的每个元素一次。形式上，对于子数组 nums[i], nums[i + 1], ..., nums[j] ，不存在 i <= k1, k2 <= j 其中 k1 % n == k2 % n 。
+*/
+int Solution_everyDay::t0918_maxSubarraySumCircular(vector<int>& nums)
+{
+	// 动态规划 
+	int len = nums.size();
+	if (len == 1) return nums[0];
+	int dp = 0, dp1 = 0, Max = nums[0], sum = 0, Min = -nums[0];
+	for (auto& n : nums) {
+		sum += n;
+		dp = max(n, dp + n);
+		dp1 = max(-n, dp1 + (-n));
+		Max = max(Max, dp);
+		Min = max(Min, dp1);
+
+	}
+	// 如果第一次循环发现整个数列相加为正 ， 找到最大的子串
+	return Max > 0 ? max(Max , sum+Min): Max ;
+}
+
+/*1499. 满足不等式的最大值
+给你一个数组 points 和一个整数 k 。数组中每个元素都表示二维平面上的点的坐标，并按照横坐标 x 的值从小到大排序。
+也就是说 points[i] = [xi, yi] ，并且在 1 <= i < j <= points.length 的前提下， xi < xj 总成立。
+请你找出 yi + yj + |xi - xj| 的 最大值，其中 |xi - xj| <= k 且 1 <= i < j <= points.length。
+
+题目测试数据保证至少存在一对能够满足 |xi - xj| <= k 的点。
+*/
+int Solution_everyDay::t1499_findMaxValueOfEquation(vector<vector<int>>& points, int k)
+{
+	/// <summary>
+	///  其实可以用 队列 ，set来进行优化
+	/// </summary>
+	/// <param name="points"></param>
+	/// <param name="k"></param>
+	/// <returns></returns>
+	int res = INT_MIN, Max = 0, x = 0, i = 1;
+	while (i < points.size()) {
+		cout << " x  :" << points[x][0] << "_" << points[x][1] << endl;
+		cout << " Max  :" << points[Max][0] << "_" << points[Max][1] << endl;
+		cout << " i  :" << points[i][0] << "_" << points[i][1] << endl;
+
+		if (points[x][1] - points[Max][1] >= points[x][0] - points[Max][0])
+			Max = x;
+		if (points[i][0] - points[Max][0] <= k) {
+			res = max(res, points[i][1] + points[Max][1] + points[i][0] - points[Max][0]);
+			i++;
+			x++;
+		}
+		else {
+			if (points[i][0] - points[x][0] > k) {
+				x++;
+				i++;
+				Max = x;
+				continue;
+			}
+			while (points[i][0] - points[Max][0] > k && Max <= x) {
+				Max++;
+			}
+			for (int x1 = Max; x1 <= x; x1++) {
+				if (points[x1][1] - points[Max][1] > points[x1][0] - points[Max][0])
+					Max = x1;
+			}
+		}
+		cout << " res :" << res << endl;
+
+	}
+
+	return res;
+}
+
+/*
+*/
+int Solution_everyDay::t2208_halveArray(vector<int>& nums)
+{ 
+	priority_queue < double > t1 ( nums.begin() , nums.end());
+	double sum = accumulate( nums.begin() , nums.end(), 0), del = 0;;
+
+	int i = 0;
+	while (del < sum / 2) {
+		double t = t1.top();
+		t /= 2;
+		del += t;
+		i++;
+		t1.pop();
+		t1.push(t);
+	}
+	return i;
+}
+
+/*2569. 更新数组后处理求和查询
+提示
+困难
+36
+相关企业
+给你两个下标从 0 开始的数组 nums1 和 nums2 ，和一个二维数组 queries 表示一些操作。总共有 3 种类型的操作：
+操作类型 1 为 queries[i] = [1, l, r] 。你需要将 nums1 从下标 l 到下标 r 的所有 0 反转成 1 或将 1 反转成 0 。l 和 r 下标都从 0 开始。
+操作类型 2 为 queries[i] = [2, p, 0] 。对于 0 <= i < n 中的所有下标，令 nums2[i] = nums2[i] + nums1[i] * p 。
+操作类型 3 为 queries[i] = [3, 0, 0] 。求 nums2 中所有元素的和。
+请你返回一个数组，包含所有第三种操作类型的答案。
+*/
+vector<long long> Solution_everyDay::t2569_handleQuery(vector<int>& nums1, vector<int>& nums2, vector<vector<int>>& queries)
+{
+	long long sum = 0; 
+	int j = 0 , len = nums1.size();
+	vector<long long> res;
+	SegMentTree<int> st (nums1);
+	for (auto& n : nums2) sum += n;
+	for (auto& q : queries) {
+		switch (q[0])
+		{
+		case  1:
+			st.change(1, q[1]+1, q[2]+1);
+			break;
+		case 2:
+			sum +=  q[1] * st.find( 1, 1 , len  );
+			break;
+		case 3:
+			res.push_back(sum);
+		}
+		j++;
+	}
+	return res;
+}
+
+
 //深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {
 	int sum;
