@@ -41,6 +41,8 @@ struct TreeNode {
 	
 };
 
+
+//线段树
 template < class T>
 class SegMentTree
 {
@@ -69,13 +71,17 @@ private:
 	void pushdown(int tR);
 };
 
+
+///线段树的实现代码
+
+/// 建树
 template<class T>
 inline void SegMentTree<T>::bulid(int treeRoot, int  l, int r, const vector<int>& nums)
 {
 	SegTree[treeRoot].l = l;
 	SegTree[treeRoot].r = r;
 	if (l == r) {
-		SegTree[treeRoot].sum = nums[l-1];
+		SegTree[treeRoot].sum = nums[l - 1];
 
 	}
 	else {
@@ -88,7 +94,7 @@ inline void SegMentTree<T>::bulid(int treeRoot, int  l, int r, const vector<int>
 }
 
 
-
+/// 修改
 template<class T>
 inline void SegMentTree<T>::change(int  tR, int l, int r)
 {
@@ -109,7 +115,7 @@ inline void SegMentTree<T>::change(int  tR, int l, int r)
 	SegTree[tR].sum = SegTree[tR * 2].sum + SegTree[tR * 2 + 1].sum;
 }
 
-
+///查找
 template<class T>
 inline long long  SegMentTree<T>::find(int tR, int l, int r)
 {
@@ -130,6 +136,7 @@ inline long long  SegMentTree<T>::find(int tR, int l, int r)
 
 }
 
+/// 向下传递lazyTag
 template<class T>
 inline void SegMentTree<T>::pushdown(int tR)
 {
@@ -142,4 +149,3 @@ inline void SegMentTree<T>::pushdown(int tR)
 
 	}
 }
-

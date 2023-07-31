@@ -1127,6 +1127,7 @@ int Solution_everyDay::t2208_halveArray(vector<int>& nums)
 	return i;
 }
 
+
 /*2569. 更新数组后处理求和查询
 提示
 困难
@@ -1162,6 +1163,107 @@ vector<long long> Solution_everyDay::t2569_handleQuery(vector<int>& nums1, vecto
 	return res;
 }
 
+/*2050. 并行课程 III
+提示
+困难
+60
+相关企业
+给你一个整数 n ，表示有 n 节课，课程编号从 1 到 n 。同时给你一个二维整数数组 relations ，其中 relations[j] = [prevCoursej, nextCoursej] ，表示课程 prevCoursej 必须在课程 nextCoursej 之前 完成（先修课的关系）。
+同时给你一个下标从 0 开始的整数数组 time ，其中 time[i] 表示完成第 (i+1) 门课程需要花费的 月份 数。
+请你根据以下规则算出完成所有课程所需要的 最少 月份数：
+如果一门课的所有先修课都已经完成，你可以在 任意 时间开始这门课程。
+你可以 同时 上 任意门课程 。 
+请你返回完成所有课程所需要的 最少 月份数。
+
+注意：测试数据保证一定可以完成所有课程（也就是先修课的关系构成一个有向无环图）。
+*/
+int Solution_everyDay::t2050_minimumTime(int n, vector<vector<int>>& relations, vector<int>& time)
+{
+	// 动态规划， 找到每个学科学习需要的最小月份事件
+	vector<priority_queue<int>> Cour(n);
+	vector<int> dp(n,0);
+	int res = 0;
+	for (auto& r : relations) {
+		Cour[r[1]-1].push(r[0]);
+	}
+	function  <int(int)> dfs = [&](int c) -> int {
+		if (Cour[c-1].empty()) {
+			dp[c - 1] = time[c - 1];
+			return time[c - 1];
+		}
+		else {
+			int cur = 0;
+			while(!Cour[c - 1].empty()){
+				int t = Cour[c - 1].top();
+				if (!dp[t-1])
+					dp[t-1] = dfs(t);
+				cur = max(cur, time[c - 1] + dp[t - 1]);
+				Cour[c - 1].pop();
+			}
+			return cur;
+		}
+	};
+	for (int i = 1; i <= n; i++) {
+		if (!dp[i - 1])
+			dp[i - 1] = dfs(i);
+	}
+	for (auto &d : dp) {
+		res = max(d, res);
+	}
+	return res;
+}
+/*142. 环形链表 II
+中等
+
+给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。
+如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+不允许修改 链表。
+*/
+ListNode* Solution_everyDay::t0142_detectCycle(ListNode* head)
+{
+	// 快慢表， 双指针
+	ListNode* l = head;
+	ListNode* h = head;
+	while (h->next) {
+		h = h->next;
+		h = h-> next;
+		if (h == nullptr) return nullptr;
+		l = l->next;
+		if (l == h) break;
+	}
+	while (l != head) {
+		l = l -> next;
+		head = head->next;
+	}
+	return head;
+}
+
+
+
+void Solution_everyDay::t0143_reorderList(ListNode* head)
+{
+	ListNode* h = head;
+	stack<ListNode*> list;
+	while (h) {
+		list.push(h);
+		h = h->next;
+	}
+	h = head;
+	ListNode* t = list.top();
+	while (true) {
+
+		if (h != head) t->next = head;
+		if (t == head || list.top() == head) { list.top()->next = nullptr; break;};
+		list.top()->next = head->next;
+		head->next = list.top();
+		head = list.top()->next;
+		t = list.top();
+		list.pop();
+	}
+}
+
+
 
 //深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {
@@ -1184,9 +1286,6 @@ int dfs (ListNode* l, ListNode* s, int dis) {
 		return sum / 10;
 	}
 }
-
-
-
 
 
 // 自动向map里面添加数据，如果存在就累加，不存在就直接加

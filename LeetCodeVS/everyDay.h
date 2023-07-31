@@ -119,6 +119,15 @@ public:
 	//2569. 更新数组后处理求和查询
 	vector<long long> t2569_handleQuery(vector<int>& nums1, vector<int>& nums2, vector<vector<int>>& queries);
 
+	//2050. 并行课程 III
+	int t2050_minimumTime(int n, vector<vector<int>>& relations, vector<int>& time);
+
+	//142. 环形链表 II
+	ListNode* t0142_detectCycle(ListNode* head);
+
+	//143. 重排链表
+	void t0143_reorderList(ListNode* head);
+
 private:
 
 	// 工具 函数 
