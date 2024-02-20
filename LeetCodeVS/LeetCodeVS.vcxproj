@@ -128,13 +128,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="arithmetic.cpp" />
-    <ClCompile Include="everyDay.cpp" />
+    <ClCompile Include="everyDay_2023.cpp" />
+    <ClCompile Include="everyDay_2024.cpp" />
     <ClCompile Include="MainTest.cpp" />
     <ClCompile Include="t001_t100.cpp" />
+    <ClCompile Include="tool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arithmetic.h" />
-    <ClInclude Include="everyDay.h" />
+    <ClInclude Include="everyDay_2023.h" />
+    <ClInclude Include="everyDay_2024.h" />
     <ClInclude Include="LeetCodeT100.h" />
     <ClInclude Include="tool.h" />
   </ItemGroup>

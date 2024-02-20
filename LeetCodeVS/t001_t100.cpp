@@ -1,4 +1,5 @@
 ﻿#include"LeetCodeT100.h"
+#include <functional>
 using namespace std;
 
 /** t001：
@@ -725,6 +726,369 @@ int Solution_LeetCodeT100::t035_searchInsert(vector<int>& nums, int target)
     // 加max是为了处理越界情况
     else return max(0, l);
 }
+
+/*36. 有效的数独
+请你判断一个 9 x 9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）
+ 
+
+注意：
+
+一个有效的数独（部分已被填充）不一定是可解的。
+只需要根据以上规则，验证已经填入的数字是否有效即可。
+空白格用 '.' 表示。
+*/
+bool Solution_LeetCodeT100::t036_isValidSudoku(vector<vector<char>>& board)
+{
+    vector< vector<bool>> flag(27, vector<bool>(9, false));
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (board[i][j] != '.') {
+                int n = (board[i][j] - '0') -1 ;
+                if (flag[i][n]) return false;
+                else flag[i][n] = true;
+                cout << " hang ";
+                if (flag[9 + j][n]) return false;
+                else flag[9 + j][n] = true;
+                cout << " lie ";
+
+                if (flag[18 + i / 3 + (j / 3) * 3][n]) return false;
+                else  flag[18 + i / 3 + (j / 3) * 3][n] = true;
+                cout << " block" << endl;
+
+            }
+        }
+    }
+    return true;
+}
+
+/*37. 解数独
+编写一个程序，通过填充空格来解决数独问题。
+
+数独的解法需 遵循如下规则：
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）
+数独部分空格内已填入了数字，空白格用 '.' 表示。
+*/
+void Solution_LeetCodeT100::t037_solveSudoku(vector<vector<char>>& board)
+{   
+    vector<vector<bool>> flag;
+    auto isOk = [&](int i, int j, int num)-> bool {
+        if (flag[i][num]) return false;
+        if (flag[9 + j][num]) return false;
+        if (flag[18 + (i / 3) + j * 3][num]) return  false;
+        return true;
+
+    };
+
+}
+
+string Solution_LeetCodeT100::t038_countAndSay(int n)
+{
+    if (n == 1) return "1";
+        string res = "1";
+        while (n-1) {
+            char p = '0';
+            int  c_n = 0;
+            string res1;
+            for (auto c : res) {
+                if (c == p) {
+                    c_n++;
+                }
+                else {
+                    if (c_n)
+                        res1 += to_string(c_n) + p;
+                    p = c;
+                    c_n = 1;
+                }
+            }
+            res = res1 + to_string(c_n) + p;
+            n--;
+        }
+    return res;
+}
+
+/*39. 组合总和
+给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
+对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+*/
+vector<vector<int>> Solution_LeetCodeT100::t039_combinationSum(vector<int>& cds, int target)
+{
+    vector<vector<int>> res;
+    sort(cds.begin(), cds.end());
+    function< void(int,int, int,vector<int> )> dps = [&](int n,int l ,int low, vector<int> r )->void {
+        if (l)
+            r.push_back(l);
+        if (n == 0) {
+            res.push_back(r);
+        }
+        else {
+            if (find(cds.begin(), cds.end(), n) != cds.end()) {
+                dps(0, n, low, r);
+            }
+            for (int i = low; i < cds.size() && cds[i] <= n / 2; i++) {
+                int d = n - cds[i];
+                // low 负责剪枝
+                dps(d, cds[i], i, r);
+                
+            }
+        }
+    };
+    dps(target,0,0, {});
+    return res;
+    //return{};
+}
+
+/*40. 组合总和 II
+给定一个候选人编号的集合 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+candidates 中的每个数字在每个组合中只能使用 一次 。
+注意：解集不能包含重复的组合。 
+*/
+vector<vector<int>> Solution_LeetCodeT100::t040_combinationSum2(vector<int>& cds, int target)
+{
+    vector<vector<int>> res;
+    sort(cds.begin(), cds.end());
+    vector<bool> b ( cds.size() , false);
+    function<void(int ,int ,vector<int>)>dfs = [&](int n,  int low, vector<int> r ) -> void {
+       
+        if (low>=0) {
+            r.push_back(cds[low]);
+        }
+        if (n == 0)
+            res.push_back(r);
+        else if (n > 0)
+        {
+            for (int i = low+1; i < cds.size() && cds[i] <=  n; i++) {
+                if (i > low+1 && cds[i] == cds[i - 1])
+                    continue;
+                dfs(n - cds[i],i, r );
+            }
+        }
+    };
+    dfs(target,-1 ,{});
+    return  res;
+}
+
+
+/*41. 缺失的第一个正数
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
+*/
+int Solution_LeetCodeT100::t041_firstMissingPositive(vector<int>& nums)
+{
+    for (int i = 0; i < nums.size(); i++) {
+        if (nums[i] > 0 && nums[i] <= nums.size()) {
+
+            int t = nums[nums[i] - 1];
+            if (t == nums[i])
+                continue;
+            nums[nums[i] - 1] = nums[i];
+            nums[i] = t;
+            if (t > 0 && t <= nums.size())
+                i--;
+        }
+        else
+            nums[i] = 0;
+    }
+    for (int i = 0; i < nums.size(); i++) {
+        if (i != nums[i] - 1)
+            return i + 1;
+    }
+    return nums.size() + 1;
+}
+
+/*42. 接雨水
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+*/
+int Solution_LeetCodeT100::t042_trap(vector<int>& height)
+{
+    int len = height.size();
+    int res = 0, l = 0, r = 0, t1 = 0 , t2 = 0;
+    for (int i = 0; i <len ; i++) {
+        if (height[i] >= l) {
+            l = height[i];
+            res += t1; 
+            t1 = 0;
+        }
+        else {
+            t1 += l - height[i];
+        }
+        if (height[len - 1 - i] > r) {
+            r = height[len - 1 - i];
+            res += t2;
+            t2 = 0;
+        }
+        else {
+            t2 += r - height[len - 1 - i];
+        }
+    }
+    return res;
+}
+
+/*43. 字符串相乘
+给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。
+*/
+string Solution_LeetCodeT100::t043_multiply(string num1, string num2)
+{
+    if (num1 == "0" || num2 == "0") {
+        return "0";
+    }
+
+    // 探究乘法运算本质，分解为num1和num2每一位数字的乘法运算
+    string res(num1.size() + num2.size(), '0');
+    cout << res << endl;
+    for (int i = num1.size()-1; i >= 0 ; i--) {
+        for (int j = num2.size()-1; j >=0; j--) {
+            int t = (num1[i] - '0') * (num2[j] - '0');
+            int r = res[i + j + 1 ] -'0' + t % 10;
+            res[i + j + 1 ] = r % 10 + '0';
+            r = res[i + j ] -'0' + t / 10 + r / 10;
+            res[i + j ] = r % 10 + '0';
+            int k = i + j ;
+            while (r / 10 && k >=0) {
+                k--;
+                r = res[k] - '0' + r / 10;
+                res[k] = r % 10 + '0';
+            }
+        }
+    }
+
+    return  res[0] == '0' ? string(res.begin() + 1, res.end()) : res;
+}
+
+/*44. 通配符匹配
+困难
+1.1K
+给你一个输入字符串 (s) 和一个字符模式 (p) ，请你实现一个支持 '?' 和 '*' 匹配规则的通配符匹配：
+'?' 可以匹配任何单个字符。
+'*' 可以匹配任意字符序列（包括空字符序列）。
+判定匹配成功的充要条件是：字符模式必须能够 完全匹配 输入字符串（而不是部分匹配）。
+*/
+bool Solution_LeetCodeT100::t044_isMatch(string s, string p)
+{
+    // 直接参考 t_010 ,正则表达式匹配,动态规划完事
+    // 可以想想怎么优化内存开销，dp能不能用单队列表示
+    vector<vector<int>> dp(p.size() + 1, vector<int>(s.size() + 1, false));
+    dp[0][0] = true;
+    int s_index = -1;
+    for (int p_i = 0; p_i < p.size(); p_i++) {
+        if (p[p_i] == '*') {
+            int i = s_index;
+            while (i < s.size() || i == -1) {
+                dp[p_i + 1][i + 1] = true;
+                i++;
+            }
+        }
+        else {
+            s_index++;
+            if (s_index == s.size()) return false;
+            int i = s_index;
+            int flag = s.size();
+            while (i < s.size()) {
+                if ((s[i] == p[p_i] || p[p_i] == '?') && dp[p_i][i]) {
+                    dp[p_i + 1][i + 1] = true;
+                    flag = min(flag, i);
+                }
+                i++;
+            }
+            if (flag == s.size()) return false;
+            s_index = flag;
+        }
+    }
+    return dp[p.size()][s.size()];
+}
+
+/*45. 跳跃游戏 II
+中等
+2.2K
+相关企业
+给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
+每个元素 nums[i] 表示从索引 i 向前跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
+0 <= j <= nums[i] 
+i + j < n
+返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。
+*/
+int Solution_LeetCodeT100::t045_jump(vector<int>& nums)
+{
+    // 动态规划 + 贪心算法？
+    if (nums.size() == 1) {
+        return 0;
+    }
+    int res = 1, len = nums.size();
+    for (int i = 0; i < len; ) {
+        int Max = i + nums[i], Max_i = i;
+        if (Max >= len - 1) return res;
+        for (int j = i + 1; j < len && j <= i + nums[i]; j++) {
+            if (nums[j] + j > Max) {
+                Max = nums[j] + j;
+                Max_i = j;
+            }
+        }
+        res++;
+        i = Max_i;
+    }
+    return 0;
+}
+
+/*46. 全排列
+中等
+2.6K
+相关企业
+给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+*/
+vector<vector<int>> Solution_LeetCodeT100::t046_permute(vector<int>& nums)
+{
+    vector<vector<int>> res; 
+    function<  void(int)> dfs = [&]( int len )-> void {
+        if (len  == nums.size()) res.push_back(nums);
+        else {
+            for (int i = len ; i < nums.size(); i++) {
+                swap(nums[len], nums[i]);
+                dfs(len + 1);
+                swap(nums[len], nums[i]);
+
+            }
+        }
+    };
+    dfs(0);
+    return  res ;
+}
+
+/*47. 全排列 II
+中等
+1.4K
+相关企业
+给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
+*/
+vector<vector<int>> Solution_LeetCodeT100::t047_permuteUnique(vector<int>& nums)
+{
+    if (nums.size() == 1) return { nums };
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> res;
+    function<  void(int)> dfs = [&](int len)-> void {
+        if (len == nums.size()) res.push_back(nums);
+        else {
+            for (int i = len; i < nums.size(); i++) {
+                if ((nums[i] == nums[len] && i != len) ) continue;
+                if ( i> len && nums[i - 1] -nums[i] == 0) continue;
+                swap(nums[len], nums[i]);
+                dfs(len + 1);
+                swap(nums[len], nums[i]);
+            }
+        }
+    };
+    dfs(0);
+    return  res;
+}
+
+
 
 
 

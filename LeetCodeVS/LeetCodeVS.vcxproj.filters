@@ -33,7 +33,13 @@
     <ClCompile Include="arithmetic.cpp">
       <Filter>源文件\arithmetic</Filter>
     </ClCompile>
-    <ClCompile Include="everyDay.cpp">
+    <ClCompile Include="everyDay_2023.cpp">
+      <Filter>源文件\everyDay</Filter>
+    </ClCompile>
+    <ClCompile Include="tool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="everyDay_2024.cpp">
       <Filter>源文件\everyDay</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,10 +50,13 @@
     <ClInclude Include="arithmetic.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="everyDay.h">
+    <ClInclude Include="everyDay_2023.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="tool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="everyDay_2024.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

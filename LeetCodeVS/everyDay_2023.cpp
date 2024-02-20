@@ -1,4 +1,4 @@
-﻿#include"everyDay.h"
+﻿#include"everyDay_2023.h"
 #include <functional>
 
 
@@ -1264,6 +1264,240 @@ void Solution_everyDay::t0143_reorderList(ListNode* head)
 }
 
 
+/*2681. 英雄的力量
+提示
+困难
+25
+相关企业
+给你一个下标从 0 开始的整数数组 nums ，它表示英雄的能力值。如果我们选出一部分英雄，这组英雄的 力量 定义为：
+i0 ，i1 ，... ik 表示这组英雄在数组中的下标。那么这组英雄的力量为 max(nums[i0],nums[i1] ... nums[ik])2 * min(nums[i0],nums[i1] ... nums[ik]) 。
+请你返回所有可能的 非空 英雄组的 力量 之和。由于答案可能非常大，请你将结果对 109 + 7 取余。
+*/
+int Solution_everyDay::t2681_sumOfPower(vector<int>& nums)
+{
+	// 本质是最大值平方*最小值之和的问题
+	sort(nums.begin(), nums.end());
+
+	int len = nums.size();
+	int res = 0, mod = 1e9 + 7;
+	long long dp = 0, sum = 0;
+	for (auto & n : nums) {
+		dp = (sum +n) % mod;
+		sum = (sum + dp) % mod;
+		res = (int)((res + n *  dp  %mod * n) % mod);
+	}
+	return res;
+}
+
+
+/*822. 翻转卡片游戏
+中等
+28
+相关企业
+在桌子上有 N 张卡片，每张卡片的正面和背面都写着一个正数（正面与背面上的数有可能不一样）。
+我们可以先翻转任意张卡片，然后选择其中一张卡片。
+如果选中的那张卡片背面的数字 X 与任意一张卡片的正面的数字都不同，那么这个数字是我们想要的数字。
+哪个数是这些想要的数字中最小的数（找到这些数中的最小值）呢？如果没有一个数字符合要求的，输出 0。
+其中, fronts[i] 和 backs[i] 分别代表第 i 张卡片的正面和背面的数字。
+如果我们通过翻转卡片来交换正面与背面上的数，那么当初在正面的数就变成背面的数，背面的数就变成正面的数。
+*/
+int Solution_everyDay::t0822_flipgame(vector<int>& fronts, vector<int>& backs)
+{
+	set <int> q1;
+	set <int> q2;
+	int res = 0;
+	for (int i = 0; i < fronts.size(); i++) {
+		if (fronts[i] == backs[i])
+			q2.insert(fronts[i]);
+		else {
+			q1.insert(fronts[i]);
+			q1.insert(backs[i]);
+		}
+
+	}
+	while (!q1.empty() && !q2.empty() && *q2.begin()<= *q1.begin()) {
+		if (*q2.begin() == *q1.begin()) {
+			q1.erase(q1.begin());
+			q2.erase(q2.begin());
+		}
+		else
+			q2.erase(q2.begin());
+	}
+	if (q1.empty()) return 0;
+	return *q1.begin();
+}
+
+/*722. 删除注释
+提示
+中等
+115
+相关企业
+给一个 C++ 程序，删除程序中的注释。这个程序source是一个数组，其中source[i]表示第 i 行源码。 这表示每行源码由 '\n' 分隔。
+
+在 C++ 中有两种注释风格，行内注释和块注释。
+
+字符串// 表示行注释，表示//和其右侧的其余字符应该被忽略。
+字符串/* 表示一个块注释，它表示直到下一个（非重叠）出现的 "/*"之间的所有字符都应该被忽略。（阅读顺序为从左到右）非重叠是指，字符串/* /并没有结束块注释，因为注释的结尾与开头相重叠。
+第一个有效注释优先于其他注释。
+
+如果字符串//出现在块注释中会被忽略。
+同样，如果字符串/*出现在行或块注释中也会被忽略。
+如果一行在删除注释之后变为空字符串，那么不要输出该行。即，答案列表中的每个字符串都是非空的。
+样例中没有控制字符，单引号或双引号字符。
+比如，source = "string s = "/* Not a comment. * / 不会出现在测试样例里。
+此外，没有其他内容（如定义或宏）会干扰注释。
+我们保证每一个块注释最终都会被闭合， 所以在行或块注释之外的 /*总是开始新的注释。
+最后，隐式换行符可以通过块注释删除。 有关详细信息，请参阅下面的示例。
+
+从源代码中删除注释后，需要以相同的格式返回源代码。
+*/
+vector<string> Solution_everyDay::t0722_removeComments(vector<string>& source)
+{
+	string s1 = "//", s2 = "/*", s3 = "*/";
+	int flag = 0;
+	string tl = "";
+	for (int s = 0; s < source.size(); s++) {
+		// 已有注释， 只有 /* 这一种情况
+		string t = "";
+		for (int i = 0; i < source[s].size(); i++) {
+			if ( !flag){
+				if (source[s][i] == '/' && i + 1 < source[s].size()) {
+					if (source[s][i + 1] == '/') {
+						i = source[s].size();
+						continue;
+					}
+					else if (source[s][i + 1] == '*') {
+						flag = 1;
+						i++;
+						continue;
+					}
+				}
+
+					t += source[s][i];
+			}
+			else{
+				if (source[s][i] == '*' && i + 1 < source[s].size()) {
+					if (source[s][i + 1] == '/') {
+						flag = 0;
+						i++;
+					}
+				}
+			}
+		}
+
+		if (t== "") {
+			if ( !flag ) {
+				tl = "";
+			}
+			source.erase(source.begin() + s);
+			s--;
+		}
+		else if (tl != ""&& !flag) {
+			source[s - 1] = tl + t;
+			tl = "";
+			source.erase(source.begin() + s);
+			s--;
+		}
+		else if(flag){
+			tl = t;
+			source[s] = t;
+		}
+		else
+			source[s] = t;
+	}
+	return source;
+}
+
+/*980. 不同路径 III
+困难
+272
+相关企业
+在二维网格 grid 上，有 4 种类型的方格：
+
+1 表示起始方格。且只有一个起始方格。
+2 表示结束方格，且只有一个结束方格。
+0 表示我们可以走过的空方格。
+-1 表示我们无法跨越的障碍。
+返回在四个方向（上、下、左、右）上行走时，从起始方格到结束方格的不同路径的数目。
+
+每一个无障碍方格都要通过一次，但是一条路径中不能重复通过同一个方格。
+1 <= grid.length * grid[0].length <= 20*/
+int Solution_everyDay::t0980_uniquePathsIII(vector<vector<int>>& grid)
+{
+	/*回溯法*/
+
+	/*int x_l = grid.size(), y_l = grid[0].size();
+	int res = 0, d = 0, x_s = 0, y_s = 0;
+	function  <void(int, int, int)> dfs = [&](int x, int y, int dist) -> void {
+		if (grid[x][y] == 2)
+			res += dist == d ? 1 : 0;
+		else if (grid[x][y] >= 0) {
+			dist += 1;
+			grid[x][y] = -1;
+			if (x > 0)
+				dfs(x - 1, y, dist);
+			if (x < x_l - 1)
+				dfs(x + 1, y, dist);
+			if (y > 0)
+				dfs(x, y - 1, dist);
+			if (y < y_l - 1)
+				dfs(x, y + 1, dist);
+			grid[x][y] = 0;
+		}
+	};
+	for (int i = 0; i < x_l; i++) {
+		for (int j = 0; j < y_l; j++) {
+			if (grid[i][j] == 1) {
+				x_s = i, y_s = j;
+			}
+			else if (grid[i][j] == 0)
+				d++;
+		}
+	}
+	dfs(x_s, y_s, -1);
+	return res;*/
+
+	/* 状态压缩 + 记忆化搜索*/
+	int m = grid.size(), n = grid[0].size(), vis = 0, sx, sy;
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			if (grid[i][j] < 0) vis |= 1 << (i * n + j); // 把障碍方格算上
+			else if (grid[i][j] == 1) sx = i, sy = j; // 起点
+		}
+	}
+
+	int all = (1 << m * n) - 1;  // 全集（所有格子的坐标集合）
+	unordered_map<int, int> memo;
+	function<int(int, int, int)> dfs = [&](int x, int y, int vis) -> int {
+		int p = x * n + y;
+		if (x < 0 || x >= m || y < 0 || y >= n || vis >> p & 1)
+			return 0; // 不合法
+		vis |= 1 << p; // 标记访问过 (x,y)，因为题目要求「不能重复通过同一个方格」
+		if (grid[x][y] == 2) // 到达终点
+			return vis == all; // 必须访问所有的无障碍方格
+		int key = (p << m * n) | vis; // 把参数压缩成一个整数（左移 m*n 是因为 vis 至多有 m*n 个比特）
+		if (memo.count(key)) return memo[key]; // 之前算过
+		return memo[key] = dfs(x - 1, y, vis) + dfs(x, y - 1, vis) +
+			dfs(x + 1, y, vis) + dfs(x, y + 1, vis);
+	};
+	return dfs(sx, sy, vis);
+
+
+}
+
+/*1289. 下降路径最小和 II
+提示
+困难
+159
+相关企业
+给你一个 n x n 整数矩阵 grid ，请你返回 非零偏移下降路径 数字和的最小值。
+
+非零偏移下降路径 定义为：从 grid 数组中的每一行选择一个数字，且按顺序选出来的数字中，相邻数字不在原数组的同一列。
+*/
+int Solution_everyDay::t1289_minFallingPathSum(vector<vector<int>>& grid)
+{
+	return 0;
+}
 
 //深度遍历
 int dfs (ListNode* l, ListNode* s, int dis) {

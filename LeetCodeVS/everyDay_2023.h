@@ -128,6 +128,22 @@ public:
 	//143. 重排链表
 	void t0143_reorderList(ListNode* head);
 
+	//2681. 英雄的力量
+	int t2681_sumOfPower(vector<int>& nums);
+
+	//822. 翻转卡片游戏
+	int t0822_flipgame(vector<int>& fronts, vector<int>& backs);
+
+	//722. 删除注释
+	vector<string> t0722_removeComments(vector<string>& source);
+
+	//980. 不同路径 III
+	int t0980_uniquePathsIII(vector<vector<int>>& grid);
+
+	//1289. 下降路径最小和 II
+	int t1289_minFallingPathSum(vector<vector<int>>& grid);
+
+
 private:
 
 	// 工具 函数 

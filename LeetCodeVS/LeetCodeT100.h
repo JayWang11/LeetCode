@@ -53,6 +53,45 @@ public:
     //35. 搜索插入位置
     int t035_searchInsert(vector<int>& nums, int target);
 
+    //36. 有效的数独
+    bool t036_isValidSudoku(vector<vector<char>>& board);
+
+    //37. 解数独
+    void t037_solveSudoku(vector<vector<char>>& board);
+
+    //38. 外观数列
+    string t038_countAndSay(int n);
+
+    //39. 组合总和
+    vector<vector<int>> t039_combinationSum(vector<int>& cds, int target);
+
+    //40. 组合总和 II
+    vector<vector<int>> t040_combinationSum2(vector<int>& candidates, int target);
+
+    //41. 缺失的第一个正数
+    int t041_firstMissingPositive(vector<int>& nums);
+
+    //42. 接雨水
+    int t042_trap(vector<int>& height);
+
+    //43. 字符串相乘
+    string t043_multiply(string num1, string num2);
+
+    //44. 通配符匹配
+    bool t044_isMatch(string s, string p);
+
+    //45. 跳跃游戏 II
+    int t045_jump(vector<int>& nums);
+
+    //46. 全排列
+    vector<vector<int>> t046_permute(vector<int>& nums);
+
+    //47. 全排列 II
+    vector<vector<int>> t047_permuteUnique(vector<int>& nums);
+
+
+
+
 private:
 
     //22 深度遍历辅助函数
